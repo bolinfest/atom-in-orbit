@@ -134,29 +134,56 @@ faked in the browser by rebuilding the native UI using DOM elements.
 
 ## Building the Webapp
 
-First, you must create a `config.local.json` file in the root of your project
-with some configuration information. Specifically, it needs the location of a
-[source checkout of Atom](https://github.com/atom/atom) that has been built at
-the revision specified in the `config.json` file.
+#### 1. Checkout this project
 
-```
-{
-  "ATOM_SRC": "/home/mbolin/code/atom"
-}
+```sh
+git clone git@github.com:facebooknuclide/atom-in-orbit.git
 ```
 
-You can build the local demo by running (this takes 10s on my Linux box):
+#### 2. Checkout [Atom](https://github.com/atom/atom)'s source
 
-```
-$ npm run build
+```sh
+git clone git@github.com:atom/atom.git
 ```
 
+#### 3. Reset Atom to the revision in [`config.json`](https://github.com/facebooknuclide/atom-in-orbit/blob/master/config.json)
+
+```sh
+cd atom;
+git reset --hard `grep 'ATOM_REVISION' ../atom-in-orbit/config.json | sed 's/[^0-9a-f]//g'`
+```
+
+#### 4. Build Atom
+
+```sh
+scripts/build;
+```
+([build instructions for various platforms](https://github.com/atom/atom/tree/master/docs/build-instructions))
+
+#### 5. Point this project to your Atom install via `config.local.json`
+```
+echo '{ "ATOM_SRC": "'`pwd`'" }' > ../atom-in-orbit/config.local.json;
+```
+#### 6. Build this project
+```sh
+cd ..;
+cd atom-in-orbit;
+npm install;
+npm run build;
+```
 (Unfortunately, the build script currently leaves a local change to
 `src/compile-cache.js` in `ATOM_SRC`. This is lame -- I will fix the build
 process!)
+#### 7. Open the webapp in Chrome
+```sh
+open -b com.google.chrome out/testpage.html
+```
 
-Assuming the build script succeeds, open `out/testpage.html` in Google Chrome
-and you should see Atom running in the browser. If you open the Chrome Dev
+## Using the Webapp
+
+Assuming the build script succeeds, when opening `out/testpage.html` in Google Chrome you should see Atom running in the browser.
+
+If you open the Chrome Dev
 Tools, you will see that the global `atom` has been installed and you can play
 with it just like you can in the Dev Tools in Atom itself. For example, try
 running the following in Chrome Dev Tools:
