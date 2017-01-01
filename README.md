@@ -11,7 +11,7 @@ questions here:
 
 1. Why would someone want a browser-based IDE instead of a desktop one?
 2. Assuming we're convinced we want an IDE in the browser, why should we prefer
-Atom over exisitng offerings?
+Atom over existing offerings?
 
 Many of the advantages of a web-based IDE aren't specific to IDEs, but to
 webapps, in general:
